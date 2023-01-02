@@ -1,5 +1,5 @@
 local event = require "sfm.event"
-local config = require "sfm.extensions.config"
+local config = require "sfm.extensions.sfm-filter.config"
 local sfm_actions = require "sfm.actions"
 
 local HIDDEN_ENTRY_FILTER_NAME = "hidden"
@@ -52,11 +52,21 @@ function M.setup(sfm_explorer, opts)
       expr = false,
     }
 
-    for _, key in pairs(config.opts.mappings.toggle_hidden_filter) do
+    if type(config.opts.mappings.toggle_hidden_filter) == "table" then
+      for _, key in pairs(config.opts.mappings.toggle_hidden_filter) do
+        vim.api.nvim_buf_set_keymap(
+          bufnr,
+          "n",
+          key,
+          "<CMD>lua require('sfm.extensions.sfm-filter').toggle_hidden_filter()<CR>",
+          options
+        )
+      end
+    else
       vim.api.nvim_buf_set_keymap(
         bufnr,
         "n",
-        key,
+        config.opts.mappings.toggle_hidden_filter,
         "<CMD>lua require('sfm.extensions.sfm-filter').toggle_hidden_filter()<CR>",
         options
       )
