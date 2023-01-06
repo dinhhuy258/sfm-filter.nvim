@@ -1,6 +1,6 @@
 local event = require "sfm.event"
 local config = require "sfm.extensions.sfm-filter.config"
-local sfm_actions = require "sfm.actions"
+local api = require "sfm.api"
 
 local SFM_ENTRY_FILTER_NAME = "sfm-filter"
 
@@ -19,12 +19,12 @@ local function is_filtered(entry)
 end
 
 function M.refresh()
-  local entry = sfm_actions.get_current_entry()
+  local entry = api.entry.current()
 
-  sfm_actions.refresh()
+  api.explorer.refresh()
 
   -- re-focus the current entry
-  sfm_actions.focus_file(entry.path)
+  api.navigation.focus(entry.path)
 end
 
 function M.handle_entry_filter()
