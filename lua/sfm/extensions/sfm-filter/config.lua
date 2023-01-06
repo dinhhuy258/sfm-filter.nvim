@@ -4,8 +4,9 @@ local M = {
 
 local default_config = {
   show_hidden = false,
+  ignore_names = {},
   mappings = {
-    toggle_hidden_filter = { "." },
+    toggle_filter = { "." },
   },
 }
 
@@ -20,8 +21,14 @@ function M.setup(opts)
     M.opts.show_hidden = opts.show_hidden
   end
 
-  if opts.mappings ~= nil and opts.mappings.toggle_hidden_filter ~= nil then
-    M.opts.mappings.toggle_hidden_filter = opts.mappings.toggle_hidden_filter
+  if opts.ignore_names ~= nil and type(opts.ignore_names) == "table" then
+    for _, ignore_name in ipairs(opts.ignore_names) do
+      M.opts.ignore_names[ignore_name] = true
+    end
+  end
+
+  if opts.mappings ~= nil and opts.mappings.toggle_filter ~= nil then
+    M.opts.mappings.toggle_filter = opts.mappings.toggle_filter
   end
 end
 

@@ -1,7 +1,5 @@
 # sfm-entry
 
-A NeoVim plugin that allows users to filter entries in the sfm explorer tree.
-
 The `sfm-entry` extension is a plugin for the [sfm](https://github.com/dinhhuy258/sfm.nvim) plugin that allows users to filter entries in the sfm explorer.
 
 ## Installation
@@ -28,8 +26,9 @@ The `sfm-filter` plugin provides the following configuration options:
 ```lua
 local default_config = {
   show_hidden = false,
+  ignore_names = {},
   mappings = {
-    toggle_hidden_filter = { "." },
+    toggle_filter = { "." },
   },
 }
 ```
@@ -39,8 +38,11 @@ You can override the default configuration in `load_extension` method
 ```lua
 sfm_explorer:load_extension("sfm-filter", {
   show_hidden = false,
+  ignore_names = {
+    "node_modules"
+  },
   mappings = {
-    toggle_hidden_filter = { "." },
+    toggle_filter = { "." },
   },
 })
 ```
