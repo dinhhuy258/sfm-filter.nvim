@@ -2,46 +2,35 @@ local event = require "sfm.event"
 local config = require "sfm.extensions.sfm-filter.config"
 local api = require "sfm.api"
 
-local SFM_ENTRY_FILTER_NAME = "sfm-filter"
-
 local M = {
-  sfm_explorer = nil,
+  filter_enabled = true,
 }
 
---- check if the given entry is filtered
-local function is_filtered(entry)
+--- check if the given entry can be renderable
+local function is_renderable(entry)
   if string.match(entry.name, "^[^.]") == nil then
     -- hidden
-    return true
+    return false
   end
 
-  return config.opts.ignore_names[entry.name] and true or false
+  return not (config.opts.ignore_names[entry.name] and true or false)
 end
 
-function M.refresh()
+--- reload the explorer
+function M.reload()
   local entry = api.entry.current()
 
-  api.explorer.refresh()
+  api.explorer.reload()
 
   -- re-focus the current entry
   api.navigation.focus(entry.path)
 end
 
-function M.handle_entry_filter()
-  if not config.opts.show_hidden then
-    M.sfm_explorer:register_entry_filter(SFM_ENTRY_FILTER_NAME, function(entry)
-      return not is_filtered(entry)
-    end)
-  else
-    M.sfm_explorer:remove_entry_filter(SFM_ENTRY_FILTER_NAME)
-  end
-end
-
+--- toggle hidden/ names... filter
 function M.toggle_filter()
-  config.opts.show_hidden = not config.opts.show_hidden
+  M.filter_enabled = not M.filter_enabled
 
-  M.handle_entry_filter()
-  M.refresh()
+  M.reload()
 end
 
 function M.setup(sfm_explorer, opts)
@@ -76,8 +65,13 @@ function M.setup(sfm_explorer, opts)
     end
   end)
 
-  M.sfm_explorer = sfm_explorer
-  M.handle_entry_filter()
+  sfm_explorer:register_entry_filter("sfm-filter", function(entry)
+    if not M.filter_enabled then
+      return true
+    end
+
+    return is_renderable(entry)
+  end)
 end
 
 return M
