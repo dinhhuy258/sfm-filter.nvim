@@ -8,7 +8,7 @@ local M = {
 
 --- check if the given entry can be renderable
 local function is_renderable(entry)
-  if !config.opts.show_hidden then
+  if not config.opts.show_hidden then
     if string.match(entry.name, "^[^.]") == nil then
       -- hidden
       return false
