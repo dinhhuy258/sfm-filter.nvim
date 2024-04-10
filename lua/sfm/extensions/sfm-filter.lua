@@ -8,9 +8,11 @@ local M = {
 
 --- check if the given entry can be renderable
 local function is_renderable(entry)
-  if string.match(entry.name, "^[^.]") == nil then
-    -- hidden
-    return false
+  if not config.opts.show_hidden then
+    if string.match(entry.name, "^[^.]") == nil then
+      -- hidden
+      return false
+    end
   end
 
   return not (config.opts.ignore_names[entry.name] and true or false)
