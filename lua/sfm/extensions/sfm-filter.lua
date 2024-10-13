@@ -15,6 +15,11 @@ local function is_renderable(entry)
     end
   end
 
+  local extension = string.match(entry.name, "[^.]+$")
+  if config.opts.ignore_extensions[extension] then
+    return false
+  end
+
   return not (config.opts.ignore_names[entry.name] and true or false)
 end
 

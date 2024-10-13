@@ -27,6 +27,7 @@ The `sfm-filter` plugin provides the following configuration options:
 local default_config = {
   show_hidden = false,
   ignore_names = {},
+  ignore_extensions = {},
   mappings = {
     toggle_filter = { "." },
   },
@@ -40,6 +41,9 @@ sfm_explorer:load_extension("sfm-filter", {
   show_hidden = false,
   ignore_names = {
     "node_modules"
+  },
+  ignore_extensions = {
+    "env"
   },
   mappings = {
     toggle_filter = { "." },
